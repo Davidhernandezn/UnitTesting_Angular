@@ -14,7 +14,7 @@ export class CartComponent implements OnInit {
   public Math = Math;
 
   constructor(
-    private readonly _bookService: BookService
+    private readonly _bookService: BookService //SERVICIO PRIVADO
   ) { }
 
   ngOnInit(): void {
@@ -22,20 +22,24 @@ export class CartComponent implements OnInit {
     this.totalPrice = this.getTotalPrice(this.listCartBook);
   }
 
-  
-  public getTotalPrice(listCartBook: Book[]): number {
+  //METODO CON RETURN
+  public getTotalPrice(listCartBook: Book[]): number { //COMO PARAMETRO SE TIENE ARRAY DE LIBROS
     let totalPrice = 0;
-    listCartBook.forEach((book: Book) => {
-      totalPrice += book.amount * book.price;
+    listCartBook.forEach((book: Book) => {//RECORRE ARRAY LIBROS
+      totalPrice += book.amount * book.price; //SUMA CANTIDAD POR EL PRECIO
     });
-    return totalPrice;
+    return totalPrice; //DEVUELVE EL VALOR TOTAL
   }
 
+
+  //METODO SIN RETURN
+  //BOTON CON INCREMENTO Y DECREMENTO
   public onInputNumberChange(action: string, book: Book): void {
+    //SI ACTION ES IGUAL A PLUS SUMA 1 SI RECIBE MINUS TOMA EL -1
     const amount = action === 'plus' ? book.amount + 1 : book.amount - 1;
     book.amount = Number(amount);
-    this.listCartBook = this._bookService.updateAmountBook(book);
-    this.totalPrice = this.getTotalPrice(this.listCartBook);
+    this.listCartBook = this._bookService.updateAmountBook(book);//LLAMA SERVICIO CANTIDAD DE LIBROS
+    this.totalPrice = this.getTotalPrice(this.listCartBook); //ACTUALIZA PRECIO TOTAL
   }
 
   public onClearBooks(): void {
