@@ -66,10 +66,10 @@ describe('Cart compoment', () =>{
 
     //funcion INSTANCIAR component (test)
     beforeEach(async ()=>{
+    fixture = TestBed.createComponent(CartComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();//entra por ngoninit on init 
     service= fixture.debugElement.injector.get(BookService); //SERVICIO GLOBAL
-       fixture = TestBed.createComponent(CartComponent);
-        component = fixture.componentInstance;
-        fixture.detectChanges();//entra por ngoninit on init 
     });
 
     //comprobar si el componente se cre+o correctamente (NOMBRE Y FUNCION) - Validación de Test
@@ -108,6 +108,26 @@ describe('Cart compoment', () =>{
         //debido a que esta en el TEXT BED PODEMOS ACCEDER
        // service.
 
+       //ESPIAS
+       /**spyOn SOLICITA UN COMPONENTE O SERVIVIO Y UN METODO */
+        const spy1 = spyOn (service, 'updateAmountBook').and.callFake( ()=> null); //DEBE ESTAR ANTES DE QUE SE LLANME EL METODO (NO LLAMAR SERVICIO REAL)
+        const spy2 = spyOn (component, 'getTotalPrice').and.callFake(() => null);
+        
+        //VALIDAR SI HA CAMBIADO DE VALOR
+        expect(book.amount).toBe(2); //que valga 2
+
+
+        //action y book que acabamos de agregar
+        //CON ESTO LLAMAMOS AL METODO JUNTO CON LOS QUE TIENE DENTRO
+        component.onInputNumberChange(action, book);
+        expect(book.amount === 3).toBeTrue; //que sea 3
+
+        expect(spy1).toHaveBeenCalled(); //EL METODO SE LLAMÓ CORRECTAMENTE
+        
+
+
+
+
         //F2 NO CORRECTA - SACAR SERVICIO APARTIR DEL COMPONENTE (SOLO SI ES PUBLICO)
         //component.NOMBRE_SERVICIO.METODO
 
@@ -117,5 +137,38 @@ describe('Cart compoment', () =>{
         //const service2 = component["_bookService"];// OTRA VARIABLE CON LO MISMO
        //service2.  //accede a los metodos
     });
+
+
+    /**TEST MINUS *///TEST PARA METODO SIN RETURN
+       it('onInputNumberChange DECREMENTO correcly', () =>{
+        const action = 'minus';
+        const book = listBook[0];
+        //PARA EL TEST PODEMOS VERIFICAR SI SE HA LLAMADO ALGUN METODO
+        //AGREGAR ESPIA DE CADA METODO A LLAMAR
+        /*UN TEST UNITARIO NO DEBE LLAMAR NINGUN METODO*/
+       
+        //ACCEDER AL SERVICIO DESDE UN COMPONENTE
+        //F1 CORRECTA (SE PUEDE AGREGAR AQUI O DE MANERA GLOBAL)
+        //const service= fixture.debugElement.injector.get(BookService);
+        //debido a que esta en el TEXT BED PODEMOS ACCEDER
+       // service.
+
+        //VALIDAR CAMBIOS DE VALOR
+        expect(book.amount).toBe(3);
+
+
+       //ESPIAS (SOLO VE QUE LAS LLAMADAS SE HAGAN MAS NO VALIDA SI ESTAN CAMBIANDO DE VALOR)
+       /**spyOn SOLICITA UN COMPONENTE O SERVIVIO Y UN METODO */
+        const spy1 = spyOn (service, 'updateAmountBook').and.callFake( ()=> null); //DEBE ESTAR ANTES DE QUE SE LLANME EL METODO (NO LLAMAR SERVICIO REAL)
+        const spy2 = spyOn (component, 'getTotalPrice').and.callFake(() => null);
+        //action y book que acabamos de agregar
+        //CON ESTO LLAMAMOS AL METODO JUNTO CON LOS QUE TIENE DENTRO
+        component.onInputNumberChange(action, book);
+        expect(book.amount).toBe(2);
+
+        expect(spy1).toHaveBeenCalled(); //EL METODO SE LLAMÓ CORRECTAMENTE
+    });
+
+    //NO TODOS LOS TEST VAN EN SECUENCIA, SE RECOMIEDA USAR ASYC O CREAR MODELOS O INTERFACES DIFERENTES PARA USAR
 
 });;

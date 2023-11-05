@@ -39,8 +39,9 @@ export class CartComponent implements OnInit {
     const amount = action === 'plus' ? book.amount + 1 : book.amount - 1;
     book.amount = Number(amount);
     this.listCartBook = this._bookService.updateAmountBook(book);//LLAMA SERVICIO CANTIDAD DE LIBROS
-    this.totalPrice = this.getTotalPrice(this.listCartBook); //ACTUALIZA PRECIO TOTAL
+    //this.totalPrice = this.getTotalPrice(this.listCartBook); //ACTUALIZA PRECIO TOTAL
   }
+
 
   public onClearBooks(): void {
     if (this.listCartBook && this.listCartBook.length > 0) {
@@ -54,6 +55,5 @@ export class CartComponent implements OnInit {
     this.listCartBook = [];
     this._bookService.removeBooksFromCart();
   }
-
 
 }
