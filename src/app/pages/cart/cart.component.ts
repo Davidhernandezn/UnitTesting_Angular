@@ -22,6 +22,7 @@ export class CartComponent implements OnInit {
     this.totalPrice = this.getTotalPrice(this.listCartBook);
   }
 
+  
   public getTotalPrice(listCartBook: Book[]): number {
     let totalPrice = 0;
     listCartBook.forEach((book: Book) => {
