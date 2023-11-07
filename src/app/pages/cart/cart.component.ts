@@ -44,13 +44,18 @@ export class CartComponent implements OnInit {
 
 
   public onClearBooks(): void {
-    if (this.listCartBook && this.listCartBook.length > 0) {
-      this._clearListCartBook();
+    if (this.listCartBook && this.listCartBook.length > 0) { //SI EXISTE UN CARRITO CON MAS DE 0 PRODUCTOS
+      this._clearListCartBook();//BORRA LA LISTA //METODO PRIVADO
     } else {
-       console.log("No books available");
+       console.log("No books available");//SI NO NO HAY LIBROS DISPONIBLES
     }
   }
 
+  //TEST PARA METODO PRIVADO
+  /**UN USUARIO NO LLAMA AL METODO PRIVADO ESTE ES LLAMADO DESDE UN PUBLICO
+   * 
+   * PARA HACERLE TEST HAY QUE LLAMAR AL METODO PUBLICO QUE LLAMA AL PRIVADO
+  */
   private _clearListCartBook() {
     this.listCartBook = [];
     this._bookService.removeBooksFromCart();

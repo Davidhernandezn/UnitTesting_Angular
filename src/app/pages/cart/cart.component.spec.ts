@@ -171,4 +171,36 @@ describe('Cart compoment', () =>{
 
     //NO TODOS LOS TEST VAN EN SECUENCIA, SE RECOMIEDA USAR ASYC O CREAR MODELOS O INTERFACES DIFERENTES PARA USAR
 
-});;
+
+
+    /**TEST METODO PRIVADO */
+    it('onClearBooks - works correctly',() =>{
+        //ESPIA 
+        const spyBooks = spyOn((component as any), '_clearListCartBook').and.callThrough(); //PODEMOS HACER CAST PARA METODOS PRIVADOS EN FORMA DE ESPIA (.and.callThrough; PARA LLAMAR Y ACTIVAR COMO SI FUERA SIMULACION DE PETICION)
+        const spyBooks2 = spyOn(service, 'removeBooksFromCart').and.callFake(() => null);//SIMULA LLAMADO DEL SERVICIO
+
+        component.listCartBook = listBook; //COMPROBAR SI ESTA VACIA
+        //console.log('listCartBook before',component.listCartBook.length);//imprimimos valor de la lista
+        component.onClearBooks(); //EN SU METODO LLAMA A UN  SERVICIO (EVITARLO)
+       // console.log('listCartBook after',component.listCartBook.length);//imprimimos valor de la lista
+        expect(component.listCartBook.length).toBe(0);//La lista debe estar vacia
+        //expect(component.listCartBook.length === 0).toBeTrue();//FORMA 2
+        expect(spyBooks).toHaveBeenCalled();//LLAMADO CORRECTAMENTE
+        expect(spyBooks2).toHaveBeenCalled();//LLAMADO CORRECTAMENTE //LAMADO DEL SERVICIO
+
+    });
+
+
+    /**llamada directa - NO RECOMENDABLE*/
+  it('onClearBooks - works correctly',() =>{
+    
+    const spyBooks3 = spyOn(service, 'removeBooksFromCart').and.callFake(() => null);//SIMULA LLAMADO DEL SERVICIO
+    //COMPROBAR QUE LA LISTA VA LLLENA 
+    component.listCartBook = listBook;
+    component["_clearListCartBook"](); //LLAMAR AL METODO
+
+    //COMPROBAR QUE LA LISTA VA VACIA
+    expect(component.listCartBook.length).toBe(0);
+    expect(spyBooks3).toHaveBeenCalled();//LLAMADO CORRECTAMENTE //LAMADO DEL SERVICIO
+    });
+});
