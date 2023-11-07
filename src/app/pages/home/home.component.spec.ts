@@ -39,6 +39,10 @@ const listBook: Book[] = [{
 }
 ];
 
+//VALOR A USAR EN EL SERVICIO
+const bookServiceMock = {
+    getBooks: () => of(listBook),
+};
 
 describe('HOME component', () => {
     let component: HomeComponent; //DECLARAR COMPONENT
@@ -54,7 +58,11 @@ describe('HOME component', () => {
             HomeComponent
         ],
         providers:[//AGREGA LOS SERVICIOS
-            BookService
+            //BookService
+            {//CUANDO EL COMPONENT NECESITE EL SERVICIO BOOKSERVICE
+                provide: BookService,
+                useValue: bookServiceMock//LLAME ESTE VALOR 
+            }
         ],
         schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
       }).compileComponents();
@@ -70,19 +78,17 @@ describe('HOME component', () => {
     it('should create', () =>{
         expect(component).toBeTruthy();
     });
-
     
     it('get books from the subscribe',() =>{
         //TRAER SERVICIO
         const bookService = fixture.debugElement.injector.get(BookService);
         //--para length -- const listBook: Book[] = [];
-
         //SPIA PARA ESPERAR Y SIMULAR EL METODO
         //PASAR SERVICIO Y METODO A SIMULAR
         //PASAR OBSERVABLE OF DE RXJS (espiamis el metodo y devuelve un obserbasble de tipo listbook)
-        const spy1 = spyOn(bookService, 'getBooks').and.returnValue(of(listBook));
+        //const spy1 = spyOn(bookService, 'getBooks').and.returnValue(of(listBook)); //USANDO MOCK PODEMOS EVITAR ESTA LINEA
         component.getBooks();
-        expect(spy1).toHaveBeenCalled();
+        //expect(spy1).toHaveBeenCalled();//USANDO MOCK PODEMOS EVITAR ESTA LINEA
         //VER QUE VALGA 0
         //expect(component.listBook.length).toBe(0); LENGTH CON LISTA VACIA
         //PASAR LA LISTA QUE TIENE DATOS
