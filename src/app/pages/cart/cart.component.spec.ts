@@ -70,6 +70,8 @@ describe('Cart compoment', () =>{
     component = fixture.componentInstance;
     fixture.detectChanges();//entra por ngoninit on init 
     service= fixture.debugElement.injector.get(BookService); //SERVICIO GLOBAL
+    
+    spyOn(service, 'getBooksFromCart').and.callFake(() => listBook);//EVITANDO SERVICIO EN ONINIT
     });
 
     //comprobar si el componente se cre+o correctamente (NOMBRE Y FUNCION) - Validación de Test
@@ -193,7 +195,7 @@ describe('Cart compoment', () =>{
 
     /**llamada directa - NO RECOMENDABLE*/
   it('onClearBooks - works correctly',() =>{
-    
+
     const spyBooks3 = spyOn(service, 'removeBooksFromCart').and.callFake(() => null);//SIMULA LLAMADO DEL SERVICIO
     //COMPROBAR QUE LA LISTA VA LLLENA 
     component.listCartBook = listBook;

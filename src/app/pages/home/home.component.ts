@@ -15,7 +15,7 @@ export class HomeComponent implements OnInit {
   public listBook: Book[] = [];
 
   constructor(
-    public readonly bookService: BookService
+    public readonly bookService: BookService //TOMAR EN CUENTA PARA EL TEST, YA QUE USA UN SERVICE
   ) { }
 
   ngOnInit(): void {
@@ -24,9 +24,12 @@ export class HomeComponent implements OnInit {
 
   }
 
+  //TEST A METODO CON SUBSCRIBE
   public getBooks(): void {
+    //LLAMA AL SERVICIO
+    //PIPE SOLO SE SUSCRIBE UNA VEZ
     this.bookService.getBooks().pipe(take(1)).subscribe((resp: Book[]) => {
-      this.listBook = resp;
+      this.listBook = resp; //AL SER SUSCRIBE ESTE NO ENTRA
     });
   }
 
