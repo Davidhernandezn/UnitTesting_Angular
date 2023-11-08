@@ -194,7 +194,7 @@ describe('Cart compoment', () =>{
 
 
     /**llamada directa - NO RECOMENDABLE*/
-  it('onClearBooks - works correctly',() =>{
+  fit('onClearBooks - works correctly',() =>{
 
     const spyBooks3 = spyOn(service, 'removeBooksFromCart').and.callFake(() => null);//SIMULA LLAMADO DEL SERVICIO
     //COMPROBAR QUE LA LISTA VA LLLENA 
