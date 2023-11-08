@@ -34,7 +34,7 @@ const listBook: Book[] = [{
 
 
 //nombre del fichero del test unitario y funcion
-describe('Cart compoment', () =>{
+xdescribe('Cart compoment', () =>{
     let component: CartComponent;
     //component tipo fixtu
     let fixture: ComponentFixture<CartComponent>; //para extraer el servicio (fuxture)

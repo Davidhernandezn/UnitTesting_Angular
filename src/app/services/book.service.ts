@@ -15,6 +15,7 @@ export class BookService {
     private readonly _httpClient: HttpClient
   ) { }
 
+  //TEST CON CONSULTA AUN API
   public getBooks(): Observable<Book[]> {
     const url: string = environment.API_REST_URL + `/book`;
     return this._httpClient.get<Book[]>(url);

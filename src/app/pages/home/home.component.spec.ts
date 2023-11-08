@@ -52,7 +52,7 @@ class ReduceTextPipeMock implements PipeTransform{
     }
 }
 
-fdescribe('HOME component', () => {
+describe('HOME component', () => {
     let component: HomeComponent; //DECLARAR COMPONENT
     let fixture: ComponentFixture<HomeComponent>; //DECLARAMOS EL FIXTURE
 
