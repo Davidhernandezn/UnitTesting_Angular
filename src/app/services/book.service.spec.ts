@@ -32,6 +32,7 @@ fdescribe('Book Service', () => {
 
     let service:BookService //DECLARA EL SERVICIO
     let httpMock: HttpTestingController; //DECLARA EL TESTING CONTROLLER
+    let storage = {};//DECLARAR OBJETO VACIO
 
     beforeEach( () =>{
         TestBed.configureTestingModule({
@@ -47,20 +48,26 @@ fdescribe('Book Service', () => {
         service = TestBed.inject(BookService); //Lo que se va a recibir
         //service = TestBed.get(BookService); //SOLO PARA V9
         httpMock = TestBed.inject(HttpTestingController);
+
+        //antes de cada prueba , PASAR UNA KEY DE TIPO STRING
+        spyOn(localStorage, 'getItem').and.callFake((key:string) => {
+            //STORAGE CUANDO SE LLAME GET ITEM  Y PASEMOS UNA KEY
+            return storage[key] ? storage[key]:null; //DEVUELVE STORAGE, SI NO EXISTE DEVUELVE NULL
+        });
     });
 
     afterEach(() => { //SOLO EN SERVICIO PETICIONES API
         httpMock.verify(); //HACE QUE NO HAY PETICIONES PENDIENTES ENTRE CADA TEST (NO SE LANZA OTRO SI HAY UNO PENDIENTE)
     });
 
-    it('Should be created', () => {
+    it('Should be created', () => {//SERVICIO CREADO CORRECTAMENTE
         expect(service).toBeTruthy();
     });
 
 
     //DEVUELVA LISTA DE LIBROS
     //IMPORTA O CREA LISTA DE LIBROS PARA PASARLOS
-    it('Get Books a list of book and does a get method', () => {
+    it('Get Books a list of book and does a get method', () => { //COMPROBAR METODO CON CONEXIÓN A UNA API
         //SIMULAR LA PETICION
         service.getBooks().subscribe((resp:Book[]) =>{//LA RESPUESTA ES DE TIPO ARRAYBOOY
         expect(resp).toEqual(listBook);//array recibido sea igual al que esta en respuesta
@@ -72,4 +79,22 @@ fdescribe('Book Service', () => {
     req.flush(listBook);//SIMULAR LA PETICIOH Y DEVUELVE OBSERBABLE DE LISTBOOK
 });
 
+    
+//TEST SERVICIO LOCALSTORAGE
+//usamos un get y set item
+    /**  public getBooksFromCart(): Book[] {
+    let listBook: Book[] = JSON.parse(localStorage.getItem('listCartBook'));
+    if (listBook === null) {
+      listBook = [];
+    }
+    return listBook;
+  }
+   */
+
+  //SIMULAR LOCALSTORAGE
+  //test: LISTA DE CARRITO VACIO DEVUELVE UN ARRAY VACIO
+    it('getBooksFromCart return empty array when localStorage is empty', () => {
+        const listBook = service.getBooksFromCart();
+        expect(listBook.length).toBe(0);//VALIDA LOCALSTORAGE
+    })
 });

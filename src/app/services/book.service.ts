@@ -18,15 +18,15 @@ export class BookService {
   //TEST CON CONSULTA AUN API
   public getBooks(): Observable<Book[]> {
     const url: string = environment.API_REST_URL + `/book`;
-    return this._httpClient.get<Book[]>(url);
+    return this._httpClient.get<Book[]>(url);//DONDE OCURRE LA PETICION (POST, PUT, DELETE,)
   }
 
-  public getBooksFromCart(): Book[] {
+  public getBooksFromCart(): Book[] { //DEVUELVE ARRAY DE LIBROS A PARTIR DEL LOCALSTORAGE
     let listBook: Book[] = JSON.parse(localStorage.getItem('listCartBook'));
-    if (listBook === null) {
-      listBook = [];
+    if (listBook === null) {//SI ESTA NULO
+      listBook = []; //DEVUELVE ARRAY VACIO
     }
-    return listBook;
+    return listBook;//SI NO ES NULO DEVUELVE LA LISTA QUE HAYA OBTENIDO
   }
 
   public removeBooksFromCart(): void {
