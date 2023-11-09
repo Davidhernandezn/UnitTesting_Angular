@@ -34,22 +34,23 @@ export class BookService {
   }
 
   public addBookToCart(book: Book) {
+    //ANTES DE AÑADIR UN LIBRO MIRA SI EXIXTE EN EL LOCAL STORAGE
     let listBook: Book[] = JSON.parse(localStorage.getItem('listCartBook'));
     if (listBook === null) { // Create a list with the book
-      book.amount = 1;
-      listBook = [ book ];
+      book.amount = 1;//SI NO EXISTE PONE CANTIDAD DE 1
+      listBook = [ book ];//HACE INSTANCIA A LA LISTA POR PRIMERA VEZ
     } else { 
       const index = listBook.findIndex((item: Book) => {
         return book.id === item.id;
       });
       if (index !== -1) { // Update the quantity in the existing book
-        listBook[index].amount++;
+        listBook[index].amount++;//SI NO EXISTE LE SUMA 1 A LO QUE HAY
       } else { 
-        book.amount = 1;
+        book.amount = 1;//LO AÑADE A LA LISTA QUE YA EXISTE
         listBook.push(book);
       }
     }
-    localStorage.setItem('listCartBook', JSON.stringify(listBook));
+    localStorage.setItem('listCartBook', JSON.stringify(listBook));//necesario agregar spy
     this._toastSuccess(book);
   }
 
@@ -69,7 +70,7 @@ export class BookService {
   }
 
   private _toastSuccess(book: Book) {
-    const Toast = swal.mixin({
+    const Toast = swal.mixin({ //DEVOLVERA OBJETO TOAST
       toast: true,
       position: 'bottom-end',
       showConfirmButton: false,
@@ -77,9 +78,10 @@ export class BookService {
       didOpen: (toast) => {
         toast.addEventListener('mouseenter', swal.stopTimer);
         toast.addEventListener('mouseleave', swal.resumeTimer);
-      }
+      }//NO DEBEMOS DEJAR NULO YA QUE FALALRIA PARA EL SIGUIENTE METODO
     });
-    Toast.fire({
+//DEVOLVER METODO QUE TIENE METODO FIRE
+    Toast.fire({//DESPUES LE HACEMOS METODO FIRE //no exixtiria metoco fire en un nulo
       icon: 'success',
       title: book.name + ' added to cart'
     });

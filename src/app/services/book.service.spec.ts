@@ -4,6 +4,8 @@ import { TestBed } from '@angular/core/testing';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { Book } from '../models/book.model';
 import { environment } from '../../environments/environment.prod';
+import Swal from 'sweetalert2';
+import swal from 'sweetalert2';
 
 const listBook: Book[] = [{
     name: '',
@@ -28,6 +30,15 @@ const listBook: Book[] = [{
 }
 ];
 
+//PARA INSERTAR BOOK
+const book: Book = {
+    name: '',
+    author:'',
+    isbn:'',
+    price: 15,
+    amount: 2
+}
+
 fdescribe('Book Service', () => {
 
     let service:BookService //DECLARA EL SERVICIO
@@ -49,10 +60,18 @@ fdescribe('Book Service', () => {
         //service = TestBed.get(BookService); //SOLO PARA V9
         httpMock = TestBed.inject(HttpTestingController);
 
+        storage = {};//RECETEAR STORAGE PARA QUE EN CADA TEST ESTE VACIO
+
         //antes de cada prueba , PASAR UNA KEY DE TIPO STRING
         spyOn(localStorage, 'getItem').and.callFake((key:string) => {
             //STORAGE CUANDO SE LLAME GET ITEM  Y PASEMOS UNA KEY
             return storage[key] ? storage[key]:null; //DEVUELVE STORAGE, SI NO EXISTE DEVUELVE NULL
+        });
+
+        //SIMULAR METODO SET ITEM
+        //SET ITEM DICE LA KEY  Y PASA UN JSON DE LISTBOOK
+        spyOn(localStorage, 'setItem').and.callFake((key:string, value:string) => {
+            return storage[key] = value; //PASAMOS LA KEY = AL VALOR QUE RECIBIMOS
         });
     });
 
@@ -79,22 +98,43 @@ fdescribe('Book Service', () => {
     req.flush(listBook);//SIMULAR LA PETICIOH Y DEVUELVE OBSERBABLE DE LISTBOOK
 });
 
-    
-//TEST SERVICIO LOCALSTORAGE
-//usamos un get y set item
-    /**  public getBooksFromCart(): Book[] {
-    let listBook: Book[] = JSON.parse(localStorage.getItem('listCartBook'));
-    if (listBook === null) {
-      listBook = [];
-    }
-    return listBook;
-  }
-   */
 
   //SIMULAR LOCALSTORAGE
   //test: LISTA DE CARRITO VACIO DEVUELVE UN ARRAY VACIO
     it('getBooksFromCart return empty array when localStorage is empty', () => {
         const listBook = service.getBooksFromCart();
         expect(listBook.length).toBe(0);//VALIDA LOCALSTORAGE
-    })
-});
+    });
+
+
+
+    //TEST ADD BOOK TO CAR
+    it('addBookToCar add a book when the list does not exixt in the localStorage', () =>{
+        //PARA METODO QUE DEVUELVE METODO FIRE
+        const toast ={
+            fire:() => null
+        } as any; //POR ERROR DEL TIPO SOLO POR USAR FIRE
+        
+        //METODO A ESPIAR
+        const spy_toast = spyOn(swal,'mixin').and.callFake( ()=> {
+            return toast;//devolver toast
+        });
+    
+    //SIMULAR METODO SET ITEM - AGREGAR SPY
+    //RESETEAR STORAGE
+    
+    //ENVIAR UN LIBRO //agregar const de un libro *en el 1er test es 0*
+    let listBook = service.getBooksFromCart();    
+    expect(listBook.length).toBe(0);
+    service.addBookToCart(book);
+    listBook = service.getBooksFromCart();    
+    service.addBookToCart(book);
+    expect(listBook.length).toBe(1);
+
+    //simular con un espia el toast usa swal.mixing 
+    expect(spy_toast).toHaveBeenCalled();
+    });
+
+
+
+}); 
