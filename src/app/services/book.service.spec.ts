@@ -136,5 +136,19 @@ fdescribe('Book Service', () => {
     });
 
 
+        //  public removeBooksFromCart(): void {
+       // localStorage.setItem('listCartBook', null);
+        //}
+    it('RemoveBooksFromCart removes the list from the localstorage', () =>
+    {
+        //COMPROBAR QUE SE HA REMOVIDO COMPLETAMENTE
+        service.addBookToCart(book); //agregamos libro
+        let listBook = service.getBooksFromCart(); //TRAER LISTA DE LIBROS
+        expect(listBook.length).toBe(1);//VALIDAR QUE LA LISTA TENGA 1
+        service.removeBooksFromCart();//elimiar lista del localstorage
+        listBook = service.getBooksFromCart();
+        expect(listBook.length).toBe(0);
+    });
+
 
 }); 

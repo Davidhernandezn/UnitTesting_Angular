@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CartComponent } from './cart.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';//importar testing
-import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA,inject, NO_ERRORS_SCHEMA } from '@angular/core';
 import { BookService } from 'src/app/services/book.service';
 import { async } from 'rxjs/internal/scheduler/async';
 import { HttpClient, HttpHandler } from '@angular/common/http';
@@ -54,7 +54,7 @@ xdescribe('Cart compoment', () =>{
                 providers:[
                 //LOS SERVICIOS QUE SE OCUPA EN CART O NUESTRO MODULO
                 BookService,
-                
+                //CartComponent
                 //NO ES LO CORRECTO 
             //    HttpClient, //para testear y se hará petición real
               //  HttpHandler//para testear y se hará petición real
@@ -74,12 +74,23 @@ xdescribe('Cart compoment', () =>{
     spyOn(service, 'getBooksFromCart').and.callFake(() => listBook);//EVITANDO SERVICIO EN ONINIT
     });
 
-    //comprobar si el componente se cre+o correctamente (NOMBRE Y FUNCION) - Validación de Test
-    it('should create',() => {
+/**FORMAS DE INSTANCIAR UN COMPONENTE 1*/
+//comprobar si el componente se cre+o correctamente (NOMBRE Y FUNCION) - Validación de Test
+  it('should create',() => {
         //esperar que ocurra algo
         expect(component).toBeTruthy();
         console.log('TEST 1 COMPONENTES');
     });
+
+/**FORMAS DE INSTANCIAR UN COMPONENTE 2*/
+//pasar inject con un array de componentes a inyectar
+//pasar variable a recibir (componenteInyectado) y su tipo
+//ESTA FORMA IMPLICA QUE DEBEMOS QUITAR EL COMPONENTE DE DECLARATION Y AGREGARLA EN PROVIDERS EN EL TESTBEAD
+//fit('should create  method', inject([CartComponent], (testComponent: CartComponent) =>{
+  //  expect(testComponent).toBeTruthy();
+//}));
+
+
 
     //TEST PARA METODO CON RETURN
     //it(' NOMBRE IDENTICADOR')
